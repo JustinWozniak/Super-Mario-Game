@@ -1,11 +1,15 @@
 {
   "name": "super-mario",
   "version": "1.0.0",
-  "description": "Justins Super Mario Game",
-  "main": "index.html",
+  "description": "",
+  "main": "index.js",
   "scripts": {
+    "start": "serve ./public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "serve": "^6.1.0"
+  }
 }
