@@ -19,7 +19,7 @@ Promise.all([
     loadBackgroundSprites(),
     loadLevel('1-1'),
 ])
-.then(([marioSprite, backgroundSprites, level]) => {
+.then(([foxSprite, backgroundSprites, level]) => {
     console.log('Level loader', level);
 
     const comp = new Compositor();
@@ -30,12 +30,13 @@ Promise.all([
         y: 64,
     };
 
-    comp.layers.push(createSpriteLayer(marioSprite, pos));
+    comp.layers.push(createSpriteLayer(foxSprite, pos));
 
     function update() {
         comp.draw(context);
-        pos.x += 2;
-        pos.y += 1;
+        //pos moves sprite across the screen
+        // pos.x += 2;
+        // pos.y += 1;
         requestAnimationFrame(update);
     }
 
