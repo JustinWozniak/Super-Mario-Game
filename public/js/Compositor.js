@@ -1,3 +1,5 @@
+//draws all the layers in order
+
 export default class Compositor {
     constructor() {
         this.layers = [];
