@@ -1,58 +1,38 @@
 import Compositor from './Compositor.js';
+import Timer from './Timer.js';
 import {loadLevel} from './loaders.js';
-import {loadFoxSprite, loadBackgroundSprites} from './sprites.js';
-import {createBackgroundLayer} from './layers.js';
+import {createFox} from './entities.js';
+import {loadBackgroundSprites} from './sprites.js';
+import {createBackgroundLayer, createSpriteLayer} from './layers.js';
 
 const canvas = document.getElementById('screen');
 const context = canvas.getContext('2d');
 
-
-function createSpriteLayer(sprite, pos) {
-    return function drawSpriteLayer(context) {
-        sprite.draw('idle', context, pos.x, pos.y);
-    };
-}
-
-class Vec2 {
-    constructor(x,y){
-        this.x = x,
-        this.y = y
-    }
-
-}
-
-
-Promise.all([loadFoxSprite(), loadBackgroundSprites(), loadLevel('1-1'),]).then(([foxSprite, backgroundSprites, level]) => {
-    console.log('Level loader', level);
-
+Promise.all([
+    createFox(),
+    loadBackgroundSprites(),
+    loadLevel('1-1'),
+])
+.then(([fox, backgroundSprites, level]) => {
     const comp = new Compositor();
-    comp.layers.push(createBackgroundLayer(level.backgrounds, backgroundSprites));
 
-    const pos = new Vec2(64, 180)
-    const velocity = new Vec2(2, -10)
+    const backgroundLayer = createBackgroundLayer(level.backgrounds, backgroundSprites);
+    comp.layers.push(backgroundLayer);
 
-    // const pos = {
-    //     x: 64,
-    //     y: 180
-    // };
+    const gravity = 30;
+    fox.pos.set(64, 180);
+    fox.vel.set(200, -600);
 
-    // const velocity = {
-    //     x: 2,
-    //     y: -10
-    // };
 
-    comp.layers.push(createSpriteLayer(foxSprite, pos));
+    const spriteLayer = createSpriteLayer(fox);
+    comp.layers.push(spriteLayer);
 
-    const GRAVITY = 0.5
-
-    function update() {
+    const timer = new Timer(1/60);
+    timer.update = function update(deltaTime) {
         comp.draw(context);
-        // pos moves sprite across the screen
-        pos.x += velocity.x;
-        pos.y += velocity.y;
-        velocity.y += GRAVITY
-        requestAnimationFrame(update);
+        fox.update(deltaTime);
+        fox.vel.y += gravity;
     }
 
-    update();
+    timer.start();
 });
