@@ -1,4 +1,6 @@
 import Entity from './Entity.js';
+import Jump from './traits/Jump.js';
+import Velocity from './traits/Velocity.js';
 import {loadFoxSprite} from './sprites.js';
 
 export function createFox() {
@@ -6,13 +8,11 @@ export function createFox() {
     .then(sprite => {
         const fox = new Entity();
 
-        fox.draw = function drawFox(context) {
-            sprite.draw('idle', context, this.pos.x, this.pos.y);
-        }
+        fox.addTrait(new Velocity());
+        fox.addTrait(new Jump());
 
-        fox.update = function updateFox(deltaTime) {
-            this.pos.x += this.vel.x * deltaTime;
-            this.pos.y += this.vel.y * deltaTime;
+        fox.draw = function drawfox(context) {
+            sprite.draw('idle', context, this.pos.x, this.pos.y);
         }
 
         return fox;
